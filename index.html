@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Driftless — Sleep Sounds</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0e11;
+      --surface: #14161c;
+      --border: #1e2028;
+      --text: #c8c9cc;
+      --muted: #555860;
+      --accent: #8a9bb0;
+      --white: #e8e9eb;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      letter-spacing: 0.02em;
+    }
+
+    /* Subtle noise texture */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 24px;
+      gap: 64px;
+    }
+
+    /* Hero */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      animation: fadeUp 1s ease both;
+    }
+
+    .icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      color: var(--accent);
+      letter-spacing: 0;
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(42px, 8vw, 72px);
+      font-weight: 300;
+      color: var(--white);
+      letter-spacing: 0.08em;
+      text-align: center;
+    }
+
+    .tagline {
+      font-size: 14px;
+      color: var(--muted);
+      text-align: center;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      max-width: 320px;
+      line-height: 1.8;
+    }
+
+    /* Divider */
+    .divider {
+      width: 40px;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* Privacy pills */
+    .privacy {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      animation: fadeUp 1s 0.2s ease both;
+    }
+
+    .privacy-label {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      max-width: 420px;
+    }
+
+    .pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 12px;
+      color: var(--text);
+      letter-spacing: 0.04em;
+      background: var(--surface);
+    }
+
+    .pill svg {
+      width: 13px;
+      height: 13px;
+      stroke: var(--accent);
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    /* Links */
+    .links {
+      display: flex;
+      gap: 32px;
+      animation: fadeUp 1s 0.35s ease both;
+    }
+
+    .links a {
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+      border-bottom: 1px solid transparent;
+      padding-bottom: 2px;
+    }
+
+    .links a:hover {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    /* Ambient wave animation */
+    .waves {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 160px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.18;
+    }
+
+    .wave {
+      position: absolute;
+      bottom: 0;
+      left: -50%;
+      width: 200%;
+      height: 100%;
+    }
+
+    .wave path {
+      fill: var(--accent);
+    }
+
+    .wave:nth-child(1) { animation: wave 12s linear infinite; opacity: 0.5; }
+    .wave:nth-child(2) { animation: wave 18s linear infinite reverse; opacity: 0.3; }
+    .wave:nth-child(3) { animation: wave 24s linear infinite; opacity: 0.2; }
+
+    @keyframes wave {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(25%); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <svg class="waves" viewBox="0 0 1440 160" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <g class="wave">
+      <path d="M0,80 C240,140 480,20 720,80 C960,140 1200,20 1440,80 L1440,160 L0,160 Z"/>
+    </g>
+    <g class="wave">
+      <path d="M0,100 C360,40 720,160 1080,100 C1260,70 1380,120 1440,100 L1440,160 L0,160 Z"/>
+    </g>
+    <g class="wave">
+      <path d="M0,120 C180,80 360,160 720,120 C1080,80 1260,160 1440,120 L1440,160 L0,160 Z"/>
+    </g>
+  </svg>
+
+  <main>
+
+    <div class="hero">
+      <div class="icon">D</div>
+      <h1>Driftless</h1>
+      <p class="tagline">Endless, non-repeating rain, ocean, and ambient soundscapes to help you sleep</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="privacy">
+      <span class="privacy-label">Privacy first</span>
+      <div class="pills">
+        <div class="pill">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          No account required
+        </div>
+        <div class="pill">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          No personal data collected
+        </div>
+        <div class="pill">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          No ads, ever
+        </div>
+        <div class="pill">
+          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 1 0 20A10 10 0 0 1 12 2"/><path d="M2 12h20"/><path d="M12 2c2.5 3 4 6.5 4 10s-1.5 7-4 10"/><path d="M12 2c-2.5 3-4 6.5-4 10s1.5 7 4 10"/></svg>
+          iCloud sync
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <nav class="links">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Use</a>
+    </nav>
+
+  </main>
+
+</body>
+</html>
